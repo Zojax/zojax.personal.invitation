@@ -1,0 +1,78 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.personal.invitation">
+
+  <!-- actions -->
+  <adapter
+     name="invite"
+     provides="zojax.content.actions.interfaces.IAction"
+     factory=".actions.JoinAction" />
+
+  <adapter
+     name="invitations"
+     provides="zojax.content.actions.interfaces.IAction"
+     factory=".actions.InvitationsAction" />
+
+  <!-- invite form -->
+  <zojax:pagelet
+     name="invite.html"
+     for="zojax.personal.profile.interfaces.IProfileWorkspace"
+     class=".invite.InviteForm"
+     permission="zojax.ModifyPreference" />
+
+  <!-- invitations form -->
+  <zojax:pagelet
+     name="invitations.html"
+     for="zojax.personal.profile.interfaces.IProfileWorkspace"
+     template="invitations.pt"
+     class=".invitations.InvitationsForm"
+     permission="zojax.ModifyPreference" />
+
+  <!-- invitation email -->
+  <zojax:mailtemplate
+     for="zojax.principal.registration.interfaces.IMembershipInvitation"
+     contentType="text/plain"
+     class=".template.InvitationMail" />
+
+  <!-- my invitations -->
+  <adapter
+     name="myinvitations"
+     provides="zojax.content.actions.interfaces.IAction"
+     factory=".actions.MyInvitationsAction" />
+
+  <zojax:pagelet
+     name="myinvitations.html"
+     for="zojax.personal.profile.interfaces.IProfileWorkspace"
+     template="myinvitations.pt"
+     class=".invitations.MyInvitations"
+     permission="zojax.ModifyPreference" />
+
+  <!-- invitation processed event -->
+  <subscriber handler=".subscriber.invitationAcceptedHandler" />
+
+  <zojax:pagelet
+     type="pagelet"
+     name="personal.message"
+     for="zope.security.interfaces.IPrincipal"
+     class=".message.MessageView"
+     template="message.pt" />
+
+  <!-- icons -->
+  <browser:icon
+     name="zmi_icon"
+     file="icons/user_go.png"
+     for=".interfaces.IJoinAction" />
+
+  <browser:icon
+     name="zmi_icon"
+     file="icons/group_go.png"
+     for=".interfaces.IInvitationsAction" />
+
+  <browser:icon
+     name="zmi_icon"
+     file="icons/group_go.png"
+     for=".interfaces.IMyInvitationsAction" />
+
+</configure>

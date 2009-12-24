@@ -1,0 +1,231 @@
+=====
+tests
+=====
+
+  >>> from zope import component
+  >>> from zope.app.intid import IntIds
+  >>> from zope.app.intid.interfaces import IIntIds
+  >>> from zope.testbrowser.testing import Browser
+  >>> from zope.app.testing.functional import getRootFolder
+  >>> from zojax.catalog.catalog import Catalog, ICatalog
+  >>> from zojax.personal.space.manager import IPersonalSpaceManager, PersonalSpaceManager
+
+  >>> root = getRootFolder()
+  >>> sm = root.getSiteManager()
+
+  >>> root['ids'] = IntIds()
+  >>> sm.registerUtility(root['ids'], IIntIds)
+  >>> root['catalog'] = Catalog()
+  >>> sm.registerUtility(root['catalog'], ICatalog)
+  >>> root['people'] = PersonalSpaceManager()
+  >>> sm.registerUtility(root['people'], IPersonalSpaceManager)
+
+  >>> emails = []
+  >>> def send(self, fromaddr, toaddr, message):
+  ...     emails.append((fromaddr, toaddr, message))
+  >>> def getEMails(clear=True):
+  ...     global emails
+  ...     m = list(emails)
+  ...     if clear:
+  ...         emails = []
+  ...     return m
+
+  >>> from zope.sendmail.mailer import SMTPMailer
+  >>> oldSend = SMTPMailer.send
+  >>> SMTPMailer.send = send
+
+
+registration action
+
+  >>> manager = Browser()
+  >>> manager.handleErrors = False
+  >>> manager.addHeader("Authorization", "Basic mgr:mgrpw")
+  >>> manager.open("http://localhost/settings/")
+  >>> manager.getLink('Portal registration').click()
+
+  >>> manager.open('http://localhost/settings/principals/registration/?configlet.widgets.actions:list=testing-action&configlet.buttons.save=Save&configlet.widgets.public:list=false&configlet.widgets.invitation:list=true')
+
+send invitation
+
+  >>> user = Browser()
+  >>> user.handleErrors = False
+  >>> user.addHeader("Authorization", "Basic user:userpw")
+  >>> user.open("http://localhost/test.html")
+  >>> user.getLink('Personal space').click()
+  >>> print user.contents
+  <html>
+  ...
+  <h2 class="z-portlet-header">Actions</h2>
+  <div class="z-portlet-body">
+    <div class="z-portlet-item">
+      <ul class="z-listing">
+        <li class="even">
+          <a href="http://localhost/people/user/profile/invite.html">
+          <img src="..." alt="JoinAction" width="16" height="16" border="0" />
+             Invite person to join this site</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  ...
+  </html>
+
+  >>> user.getLink('Invite person to join this site').click()
+  >>> user.getControl('Email').value = 'test@zojax.net'
+  >>> user.getControl('Invite').click()
+  >>> print user.contents
+  <html>
+  ...Invitation has been sent...
+  </html>
+
+  >>> len(emails)
+  1
+
+  >>> emails[-1][1][0]
+  u'test@zojax.net'
+
+  >>> from email import message_from_string, quopriMIME
+
+  >>> message = message_from_string(emails[-1][2])
+
+  >>> message['subject']
+  'User invites you to join top site'
+
+  >>> msg = message.get_payload(decode=1)
+  >>> print msg
+  Hello,
+  <BLANKLINE>
+  Join the site top!
+  <BLANKLINE>
+  Your invitation code: ...
+  <BLANKLINE>
+  Or use link http://localhost/join.html?invitationCode=...
+  <BLANKLINE>
+
+  >>> code = msg[-25:-1]
+
+join
+
+  >>> anon = Browser()
+  >>> anon.handleErrors = False
+  >>> anon.open("http://localhost/join.html")
+
+  >>> anon.getControl('Invitation code').value = 'sasdada'
+  >>> anon.getControl('Register').click()
+  >>> print anon.contents
+  <html>
+  ...
+  <label for="invitation-widgets-code" title="">Invitation code</label>
+  <span class="z-form-fieldRequired">&nbsp;</span>
+  <div class="error">Invitation code is wrong.</div>
+  ...
+  </html>
+
+  >>> anon.getControl('Invitation code').value = code
+  >>> anon.getControl('Register').click()
+  >>> print anon.contents
+  <html>
+  ...
+  <label for="invitation-widgets-code" title="">Invitation code</label>
+  <span class="z-form-fieldRequired">&nbsp;</span>
+  <div class="z-form-help"></div>
+  <div>
+     <input id="invitation-widgets-code"
+       name="invitation.widgets.code"
+       class="text-widget required invitationfield-field"
+       size="26" value="..."
+       type="text" />
+  </div>
+  ...
+  </html>
+
+
+other use view profile
+
+  >>> user2 = Browser()
+  >>> user2.handleErrors = False
+  >>> user2.addHeader("Authorization", "Basic user2:user2pw")
+  >>> user2.open("http://localhost/people/user/profile/")
+  >>> 'Invite person to join this site' in user2.contents
+  False
+  >>> 'Invitations i sent to other people' in user2.contents
+  False
+
+
+list invitations
+
+  >>> print user.contents
+  <html>
+  ...
+  <h2 class="z-portlet-header">Actions</h2>
+  <div class="z-portlet-body">
+     <div class="z-portlet-item">
+        <ul class="z-listing">
+           <li class="even">
+              <a href="http://localhost/people/user/profile/invite.html">
+              <img src="..." alt="JoinAction" width="16" height="16" border="0" />
+              Invite person to join this site</a>
+           </li>
+           <li class="odd">
+              <a href="http://localhost/people/user/profile/invitations.html">
+              <img src="..." alt="InvitationsAction" width="16" height="16" border="0" />
+              Invitations I have sent</a>
+           </li>
+         </ul>
+      </div>
+  ...
+  </html>
+
+  >>> user.getLink('Invitations I have sent').click()
+  >>> print user.contents
+  <html>
+  ...
+  <table class="z-table">
+    <tr>
+       <th></th>
+       <th>To</th>
+       <th>Expires</th>
+       <th>Subject</th>
+    </tr>
+    <tr class="odd">
+       <td><input type="checkbox" name="ids:list"
+               value="..." /></td>
+       <td>
+         test@zojax.net
+       </td>
+       <td>...</td>
+       <td>User invites you to join top site</td>
+     </tr>
+  </table>
+  ...
+  </html>
+
+  >>> user.getControl('Resend').click()
+  >>> print user.contents
+  <html>
+  ...Please select invitations...
+  </html>
+
+  >>> user.getControl(name="ids:list").value = [code]
+  >>> user.getControl('Resend').click()
+
+  >>> len(emails)
+  2
+
+  >>> user.getControl(name="ids:list").value = []
+  >>> user.getControl('Remove').click()
+  >>> print user.contents
+  <html>
+  ...Please select invitations...
+  </html>
+
+  >>> user.getControl(name="ids:list").value = [code]
+  >>> user.getControl('Remove').click()
+
+  >>> manager.open("http://localhost/settings/")
+  >>> manager.getLink('Invitations').click()
+  >>> manager.getLink('Contents').click()
+  >>> code in manager.contents
+  False
+
+  >>> SMTPMailer.send = oldSend

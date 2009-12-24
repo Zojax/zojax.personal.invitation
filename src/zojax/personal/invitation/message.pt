@@ -1,0 +1,3 @@
+<a tal:attributes="href view/space"
+   tal:condition="view/space"
+   tal:content="view/name"></a> has accepted your invitation.

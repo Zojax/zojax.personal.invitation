@@ -1,0 +1,42 @@
+<tal:block i18n:domain="zojax.personal.invitation">
+  <h1 class="z-content-title" i18n:translate="">Active invitations I have sent</h1>
+
+  <form action="invitations.html" method="post" tal:condition="view/invitations">
+    <table class="z-table">
+      <tr>
+	<th></th>
+	<th i18n:translate="">To</th>
+	<th i18n:translate="">Expires</th>
+	<th i18n:translate="">Subject</th>
+      </tr>
+      <tr tal:repeat="invitation view/invitations"
+	  tal:attributes="class python:repeat['invitation'].odd() and 'even' or 'odd'">
+	<td><input type="checkbox" name="ids:list" 
+		   tal:attributes="value invitation/id" /></td>
+	<td>
+	  <tal:block tal:condition="invitation/name">
+	    <tal:block tal:content="invitation/name" />
+	    <tal:block tal:content="string:&lt;${invitation/email}&gt;" />
+	  </tal:block>
+	  <tal:block tal:condition="not:invitation/name" tal:content="invitation/email" />
+	</td>
+	<td tal:content="structure formatter:dateTime,medium:invitation/expires"></td>
+	<td tal:content="invitation/subject"></td>
+      </tr>
+    </table>
+
+    <div class="z-form-controls">
+      <hr />
+      
+      <input type="submit" name="button.resend" 
+	     class="z-form-button" value="Resend" i18n:attributes="value" />
+      <input type="submit" name="button.remove" 
+	     class="z-form-removebutton" value="Remove" i18n:attributes="value" />
+    </div>
+  </form>
+  
+  <div tal:condition="not:view/invitations">
+    <br />
+    <tal:block i18n:translate="">There are no active invitations.</tal:block>
+  </div>
+</tal:block>
