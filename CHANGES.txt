@@ -1,0 +1,62 @@
+=======
+CHANGES
+=======
+
+0.4.3 (2009-11-20)
+------------------
+
+- Tests updated
+
+
+0.4.2 (2009-08-25)
+------------------
+
+- Fixed action title
+
+
+0.4.1 (2009-08-12)
+------------------
+
+- Update test for chameleon enabled setup
+
+
+0.4.0 (2009-06-23)
+------------------
+
+- Added "Invitations I have got" form, all my invitations
+
+- Use newer personal profile api
+
+- Copyright changed to 'Zope Foundation and Contributors'
+
+
+0.3.0 (2009-05-05)
+------------------
+
+- Use newer invitations api
+
+- Do not use z3c.autoinclude
+
+
+0.2.1 (2009-03-31)
+------------------
+
+- Handle errors in invitation process event
+
+
+0.2.0 (2009-03-27)
+------------------
+
+- Change actions titles
+
+- Added name for person being invited
+
+- Set `from` address to mail
+
+- Send personal message when person accepted invitaiton
+
+
+0.1.0 (2009-03-24)
+------------------
+
+- Initial release.
