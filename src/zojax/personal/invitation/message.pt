@@ -1,3 +1,3 @@
 <a tal:attributes="href view/space"
    tal:condition="view/space"
-   tal:content="view/name"></a> has accepted your invitation.
+   tal:content="view/name"></a><tal:block i18n:translate=""> has accepted your invitation.</tal:block>
