@@ -1,0 +1,121 @@
+##############################################################################
+#
+# Copyright (c) 2003-2004 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Thu Dec  8 23:10:19 2011\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/personal/invitation/actions.py:35
+msgid "Invite person to join this site"
+msgstr ""
+
+#: src/zojax/personal/invitation/actions.py:56
+msgid "Invitations I have sent"
+msgstr ""
+
+#: src/zojax/personal/invitation/actions.py:84
+#: src/zojax/personal/invitation/myinvitations.pt:2
+msgid "Invitations I have received"
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.pt:2
+msgid "Active invitations I have sent"
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.pt:31
+msgid "Resend"
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.pt:33
+msgid "Remove"
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.pt:40
+#: src/zojax/personal/invitation/myinvitations.pt:12
+msgid "There are no active invitations."
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.pt:8
+msgid "To"
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.pt:9
+msgid "Expires"
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.py:44
+#: src/zojax/personal/invitation/invitations.py:60
+msgid "Please select invitations."
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.py:54
+msgid "Invitations have been sent."
+msgstr ""
+
+#: src/zojax/personal/invitation/invitations.py:66
+msgid "Invitations have been removed."
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:36
+msgid "Name"
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:40
+msgid "Email"
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:44
+#: src/zojax/personal/invitation/invitations.pt:10
+msgid "Subject"
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:48
+msgid "Message"
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:56
+msgid "Invite People to Join site"
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:57
+msgid "Tell other people about this site."
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:71
+msgid "Invite"
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:77
+msgid "Please fix indicated errors."
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:86
+msgid "Invitation has been sent."
+msgstr ""
+
+#: src/zojax/personal/invitation/invite.py:89
+msgid "Cancel"
+msgstr ""
+
+#: src/zojax/personal/invitation/message.pt:3
+msgid "has accepted your invitation."
+msgstr ""
+
